@@ -36,14 +36,14 @@ console.log(token)
 
      let signInError ;
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        if (token) {
-            navigate(from, { replace: true });
-        }
-    },[token,from,navigate]
+    //     if (token) {
+    //         navigate(from, { replace: true });
+    //     }
+    // },[token,from,navigate]
     
-    ) ;
+    // ) ;
 
 
     if (loading || eLoading) {

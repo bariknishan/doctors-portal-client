@@ -11,7 +11,7 @@ const MyAppointment = () => {
   const navigate = useNavigate()
   useEffect(() => {
     const email = user?.email;
-    fetch(`http://localhost:5000/booking?patient=${email}`, {
+    fetch(`https://safe-dusk-06210.herokuapp.com/booking?patient=${email}`, {
 
       method: 'GET',
       headers: {

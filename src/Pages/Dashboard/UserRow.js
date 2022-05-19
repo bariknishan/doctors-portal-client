@@ -8,7 +8,7 @@ const UserRow = ({ user, refetch }) => {
   const makeAdmin = () => {
 
 
-    fetch(`http://localhost:5000/user/admin/${email}`, {
+    fetch(`https://safe-dusk-06210.herokuapp.com/user/admin/${email}`, {
 
       method: 'PUT',
       headers: {
@@ -18,7 +18,7 @@ const UserRow = ({ user, refetch }) => {
       .then(res => {
 
         if (res.status === 403) {
-          toast.error('failed to male an admin')
+          toast.error('failed to make an admin')
         }
 
         return res.json()

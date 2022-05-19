@@ -4,20 +4,22 @@ import Loadind from '../SharedPage/Loadind';
 import UserRow from './UserRow';
 
 const Users = () => {
-    const { data: users, isLoading ,refetch} = useQuery('users', () => fetch('http://localhost:5000/user',{
+    const { data: users, isLoading, refetch } = useQuery('users', () => fetch('https://safe-dusk-06210.herokuapp.com/user', {
 
 
-method:'GET',
-headers: {
-    authorization:`Bearer ${localStorage.getItem('accessToken')}`
+        method: 'GET',
+        headers: {
+            authorization: `Bearer ${localStorage.getItem('accessToken')}`
 
-  }
-  }).then(res => res.json()))
+        }
+    }).then(res => res.json()))
 
 
     if (isLoading) {
         return <Loadind></Loadind>
     }
+
+    
     return (
         <div>
             <h2 className='text-2xl'>All Users:{users.length} </h2>
