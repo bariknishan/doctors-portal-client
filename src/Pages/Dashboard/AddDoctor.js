@@ -1,22 +1,78 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
 import Loadind from '../SharedPage/Loadind';
 
 const AddDoctor = () => {
 
 
-    const { register, formState: { errors }, handleSubmit } = useForm();
+    const { register, formState: { errors }, handleSubmit,reset } = useForm();
 
     const { data: services, isLoading } = useQuery('services', () => fetch('http://localhost:5000/service').then(res => res.json()));
 
+
+    const imageStoragedKey = 'f4da11623ec01f3780eeed15b8ba1a7d';
+
     const onSubmit = async data => {
 
-        console.log('data', data);
+        const image = data.image[0]
+        const formData = new FormData();
+        formData.append('image', image)
+        const url = `https://api.imgbb.com/1/upload?key=${imageStoragedKey}`;
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
 
-        // console.log('update done');
 
+            .then(res => res.json())
+            .then(result => {
+
+                if (result.success) {
+                    const img = result.data.url
+                    const doctor = {
+                        name: data.name,
+                        email: data.email,
+                        speciality: data.speciality,
+                        img: img
+
+                    }
+
+                    // send to my database
+
+                    fetch('http://localhost:5000/doctor', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json',
+                            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                        },
+                        body: JSON.stringify(doctor)
+                    })
+                        .then(res => res.json())
+                        .then(inserted => {
+                            console.log('doctor', inserted);
+                            if(inserted.insertedId){
+                                toast.success('Doctors added successFully')
+                                reset();
+                            }
+
+                            else{
+                                toast.error('Failed added doctor')
+                            }
+                        })
+
+                }
+                console.log('imgbb', result);
+
+            })
     }
+
+
+
+
+
+
 
     if (isLoading) {
         return <Loadind></Loadind>
@@ -92,7 +148,7 @@ const AddDoctor = () => {
 
                     </label>
 
-                    <select {...register('speciality')} className="select mb-2 w-full max-w-xs">
+                    <select {...register('speciality')} className="select  input-bordered  mb-2 w-full max-w-xs">
 
                         {
                             services.map(service => <option
@@ -109,14 +165,14 @@ const AddDoctor = () => {
                 </div>
 
 
-              {/* <picture>---------------------</picture> */}
+                {/* <picture>---------------------</picture> */}
 
-              <div className="form-control w-full max-w-xs mx-auto">
+                <div className="form-control w-full max-w-xs mx-auto">
                     <label className="label">
                         <span className="label-text text-black">Photo</span>
 
                     </label>
-                    <input type="file" placeholder="Enter Name" className="input input-bordered  green-500 text-white  w-full max-w-xs"
+                    <input type="file" placeholder="Enter file" className="input input-bordered  green-500 text-white  w-full max-w-xs"
                         {...register("image", {
 
                             required: {
@@ -131,7 +187,7 @@ const AddDoctor = () => {
 
                     </label>
                 </div>
-   
+
 
 
 
