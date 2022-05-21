@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-
 import Loadind from '../SharedPage/Loadind';
 import DeleteModal from './DeleteModal';
 import DoctorRow from './DoctorRow';
