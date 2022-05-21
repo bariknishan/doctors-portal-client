@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 
 import Loadind from '../SharedPage/Loadind';
+import DeleteModal from './DeleteModal';
 import DoctorRow from './DoctorRow';
 
 const ManageDoctors = () => {
-
+const[deleteDoctor,setDeleteDoctor]= useState(null)
   
 
 const {data: doctors , refetch,isLoading}=useQuery('doctors', ()=> fetch('http://localhost:5000/doctor',{
@@ -26,11 +27,11 @@ if(isLoading){
         <div>
             <h2 className='text-3xl text-black'>Manage Doctors:{doctors.length}</h2>
 
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto m-2">
   <table className="table w-full mt-4 m-4">
     
-    <thead>
-      <tr>
+    <thead >
+      <tr className=''>
         <th>Serial</th>
         <th>Avatar</th>
         <th>Name</th>
@@ -38,7 +39,7 @@ if(isLoading){
         <th>Action</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody className='m-2'>
    
 {
     doctors.map((doctor ,index)=> <DoctorRow
@@ -47,11 +48,18 @@ if(isLoading){
     doctor={doctor}
     index={index}
     refetch={refetch}
+    setDeleteDoctor={setDeleteDoctor}
     ></DoctorRow>)
 }
     </tbody>
   </table>
 </div>
+
+{ deleteDoctor && <DeleteModal
+
+deleteDoctor={deleteDoctor}
+setDeleteDoctor={setDeleteDoctor}
+></DeleteModal>}
 
         </div>
     );
